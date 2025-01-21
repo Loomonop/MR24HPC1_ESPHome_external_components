@@ -64,6 +64,15 @@ void MR24HPC1Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up MR24HPC1...");
   this->check_uart_settings(115200);
 
+  // Instantiate and configure the custom_mode_number_
+  if (this->custom_mode_number_ == nullptr) {
+    this->custom_mode_number_ = new CustomModeNumber();
+    this->custom_mode_number_->set_parent(this);
+    this->custom_mode_number_->set_name("Custom Mode Number");
+    App.register_component(this->custom_mode_number_);
+  }
+
+  // Other initialization logic...
   if (this->custom_mode_number_ != nullptr) {
     this->custom_mode_number_->publish_state(0);  // Zero out the custom mode
   }
@@ -91,12 +100,6 @@ void MR24HPC1Component::setup() {
 
   this->set_interval(8000, [this]() { this->update_(); });
   ESP_LOGCONFIG(TAG, "Set up MR24HPC1 complete");
-}
-
-// Timed polling of radar data
-void MR24HPC1Component::update_() {
-  this->get_radar_output_information_switch();  // Query the key status every so often
-  this->poll_time_base_func_check_ = true;      // Query the base functionality information at regular intervals
 }
 
 // main loop
