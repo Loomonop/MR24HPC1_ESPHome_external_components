@@ -164,6 +164,8 @@ class MR24HPC1Component : public Component,
   void r24_frame_parse_human_information_(uint8_t *data);
   void send_query_(const uint8_t *query, size_t string_length);
 
+  CustomModeNumber *custom_mode_number_;
+
  public:
   float get_setup_priority() const override { return esphome::setup_priority::LATE; }
   void setup() override;
